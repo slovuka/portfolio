@@ -4,6 +4,7 @@ import urllib.request
 USER_ID = "6174930173"
 UNIVERSE_ID = "9583356773"
 
+
 def fetch_json(url):
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     with urllib.request.urlopen(req) as response:
