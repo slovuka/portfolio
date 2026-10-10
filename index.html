@@ -287,6 +287,8 @@
       description description description description description description description description
     </p>
 
+    <span id="updateTime">Updated: Loading...</span>
+
     <button onclick="copyDiscord()" id="contactBtn" class="contact-btn">Contact</button>
 
     <script>
@@ -315,10 +317,10 @@
         </div>
 
         <div class="game-stats-grid">
-          <div class="stat-tag"><span>Active</span>1 500</div>
-          <div class="stat-tag"><span>Peak</span>50 000</div>
-          <div class="stat-tag"><span>Visits</span>105 000</div>
-          <div class="stat-tag"><span>Favorites</span>10 000</div>
+          <div class="stat-tag"><span>Active</span><strong id="statActive">0</strong></div>
+          <div class="stat-tag"><span>Peak</span><strong>-</strong></div>
+          <div class="stat-tag"><span>Visits</span><strong id="statVisits">0</strong></div>
+          <div class="stat-tag"><span>Favorites</span><strong id="statFavs">0</strong></div>
         </div>
       </div>
     </div>
@@ -351,7 +353,7 @@
 <script>
   async function loadRobloxStats() {
     try {
-      const response = await fetch('./data.json');
+      const response = await fetch('./data.json?t=' + new Date().getTime());
       if (!response.ok) return;
       const data = await response.json();
 
@@ -365,15 +367,17 @@
       }
 
       if (data.game) {
-        const stats = document.querySelectorAll('.stat-tag strong');
-        if (stats.length >= 4) {
-          stats[0].innerText = data.game.active.toLocaleString();
-          stats[2].innerText = data.game.visits.toLocaleString();
-          stats[3].innerText = data.game.favorites.toLocaleString();
-        }
+        document.getElementById('statActive').innerText = data.game.active.toLocaleString();
+        document.getElementById('statVisits').innerText = data.game.visits.toLocaleString();
+        document.getElementById('statFavs').innerText = data.game.favorites.toLocaleString();
       }
+      
+      if (data.last_updated) {
+        document.getElementById('updateTime').innerText = `Updated: ${data.last_updated}`;
+      }
+      
     } catch (e) {
-      console.log('Using static data');
+      console.log('Error loading stats');
     }
   }
 
