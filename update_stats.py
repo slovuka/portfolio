@@ -37,6 +37,7 @@ def main():
 
         game_stats = {
             'name': game_name,
+            'url': f"https://www.roblox.com/games/{UNIVERSE_ID}",
             'active': game_data.get('playing', 0),
             'visits': game_data.get('visits', 0),
             'favorites': game_data.get('favoritedCount', 0),
