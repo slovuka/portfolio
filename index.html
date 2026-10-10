@@ -259,8 +259,9 @@
 
     .update-time {
       font-size: 0.75rem;
-      color: #777777;
+      color: #c4c4cc;
       text-align: center;
+      margin-top: 12px;
     }
   </style>
 </head>
@@ -321,15 +322,15 @@
         </div>
 
         <div class="game-stats-grid">
-          <div class="stat-tag"><span>Active</span>id="statActive">0</div>
-          <div class="stat-tag"><span>Peak</span>-</div>
-          <div class="stat-tag"><span>Visits</span>id="statVisits">0</div>
-          <div class="stat-tag"><span>Favorites</span>id="statFavs">0</div>
+          <div class="stat-tag"><span>Active</span><span id="statActive">0</span></div>
+          <div class="stat-tag"><span>Peak</span><span>-</span></div>
+          <div class="stat-tag"><span>Visits</span><span id="statVisits">0</span></div>
+          <div class="stat-tag"><span>Favorites</span><span id="statFavs">0</span></div>
         </div>
       </div>
-      
-      <div class="update-time" id="updateTime">Updated: Loading</div>
+
     </div>
+    <div class="update-time" id="updateTime">Data Updated: Loading</div>
   </div>
 
   <div class="section-box">
@@ -384,7 +385,7 @@
       }
       
       if (data.last_updated) {
-        document.getElementById('updateTime').innerText = `Updated: ${data.last_updated}`;
+        document.getElementById('updateTime').innerText = `Last Data Updated: ${data.last_updated}`;
       }
       
     } catch (e) {
