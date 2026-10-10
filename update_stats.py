@@ -1,8 +1,8 @@
 import json
 import urllib.request
 
-USER_ID = "ROBLOX_USER_ID"
-UNIVERSE_ID = "UNIVERSE_ID"
+USER_ID = "6174930173"
+UNIVERSE_ID = "9583356773"
 
 def fetch_json(url):
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
