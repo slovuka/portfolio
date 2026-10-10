@@ -1,4 +1,5 @@
 import json
+import os
 import urllib.request
 from datetime import datetime, timezone
 
@@ -11,6 +12,14 @@ def fetch_json(url):
         return json.loads(response.read().decode())
 
 def main():
+    old_peak = 0
+        if os.path.exists('data.json'):
+            try:
+                with open('data.json', 'r', encoding='utf-8') as f:
+                    old_data = json.load(f)
+                    old_peak = old_data.get('game', {}).get('peak', 0)
+            except Exception:
+                pass
     data = {}
 
     try:
@@ -35,16 +44,19 @@ def main():
 
         game_name = game_data.get('name', 'Game Name')
         root_place_id = game_data.get('rootPlaceId', '')
+        current_active = game_data.get('playing', 0)
+
+        best_peak = max(current_active, old_peak)
 
         game_stats = {
             'name': game_name,
             'url': f"https://www.roblox.com/games/{root_place_id}" if root_place_id else "#",
-            'active': game_data.get('playing', 0),
+            'active': current_active,
+            'peak': best_peak,
             'visits': game_data.get('visits', 0),
             'favorites': game_data.get('favoritedCount', 0),
             'image': ''
         }
-
         try:
             thumb_url = f"https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds={UNIVERSE_ID}&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false"
             thumb_data = fetch_json(thumb_url)
@@ -55,7 +67,7 @@ def main():
         data['game'] = game_stats
     except Exception as e:
         print("Error fetching game stats:", e)
-        data['game'] = {'name': 'Game Name', 'active': 0, 'visits': 0, 'favorites': 0, 'image': ''}
+        data['game'] = {'name': 'Game Name', 'url': '#', 'active': 0, 'peak': old_peak, 'visits': 0, 'favorites': 0, 'image': ''}
 
     data['last_updated'] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 

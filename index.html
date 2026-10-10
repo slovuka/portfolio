@@ -372,7 +372,7 @@
 
         <div class="game-stats-grid">
           <div class="stat-tag"><span>Active</span><span id="statActive">0</span></div>
-          <div class="stat-tag"><span>Peak</span><span>-</span></div>
+          <div class="stat-tag"><span>Peak</span><span id="statPeak">0</span></div>
           <div class="stat-tag"><span>Visits</span><span id="statVisits">0</span></div>
           <div class="stat-tag"><span>Favorites</span><span id="statFavs">0</span></div>
         </div>
@@ -423,6 +423,7 @@
           document.getElementById('gameTitle').href = data.game.url;
         }
         document.getElementById('statActive').innerText = data.game.active.toLocaleString();
+        document.getElementById('statPeak').innerText = (data.game.peak || 0).toLocaleString();
         document.getElementById('statVisits').innerText = data.game.visits.toLocaleString();
         document.getElementById('statFavs').innerText = data.game.favorites.toLocaleString();
 
