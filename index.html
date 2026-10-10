@@ -347,6 +347,38 @@
   </div>
 
 </div>
+  
+<script>
+  async function loadRobloxStats() {
+    try {
+      const response = await fetch('./data.json');
+      if (!response.ok) return;
+      const data = await response.json();
 
+      if (data.avatar) {
+        const pfpElement = document.querySelector('.pfp');
+        pfpElement.innerHTML = `<img src="${data.avatar}" alt="pfp">`;
+      }
+
+      if (data.followers !== undefined) {
+        document.querySelector('.followers-badge').innerText = `${data.followers.toLocaleString()} followers`;
+      }
+
+      if (data.game) {
+        const stats = document.querySelectorAll('.stat-tag strong');
+        if (stats.length >= 4) {
+          stats[0].innerText = data.game.active.toLocaleString();
+          stats[2].innerText = data.game.visits.toLocaleString();
+          stats[3].innerText = data.game.favorites.toLocaleString();
+        }
+      }
+    } catch (e) {
+      console.log('Using static data');
+    }
+  }
+
+  loadRobloxStats();
+</script>
+  
 </body>
 </html>
