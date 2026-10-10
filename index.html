@@ -305,6 +305,174 @@
     .icon-btn img[src*="robloxlogo.svg"] {
       filter: brightness(0);
     }
+
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+      background-color: #1a1a1a;
+    }
+
+    .slider-images {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      position: relative;
+    }
+
+    .slider-images img,
+    .slider-images video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+      cursor: pointer;
+    }
+
+    .slider-images img.active,
+    .slider-images video.active {
+      display: block;
+    }
+
+    .slider-container.single-item .slider-btn,
+    .slider-container.single-item .slider-dots {
+      display: none !important;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+
+    .slider-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .slider-btn.prev { left: 8px; }
+    .slider-btn.next { right: 8px; }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      z-index: 2;
+    }
+
+    .slider-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slider-dot.active {
+      background: #ffffff;
+    }
+
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-modal.open {
+      display: flex;
+    }
+
+    .lightbox-window {
+      background-color: #2b2b2b;
+      border-radius: 12px;
+      padding: 16px;
+      width: 90%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .lightbox-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #c4c4cc;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+    .lightbox-close:hover {
+      color: #fff;
+    }
+
+    .lightbox-preview-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-content {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .lightbox-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .lightbox-btn:hover { background: rgba(0, 0, 0, 0.8); }
+    .lightbox-btn.prev { left: 10px; }
+    .lightbox-btn.next { right: 10px; }
   </style>
 </head>
 <body>
@@ -387,14 +555,49 @@
     <h2 class="section-title">Works</h2>
 
     <div class="cards-grid">
+      <div class="card-frame">
+        <div class="card-header-title">Another System</div>
+        <div class="preview-16-9 slider-container">
+          <div class="slider-images">
+
+            <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG13ZjQxcnFidWR3aXY0cm01NmhwcHNhMWx0cG1xaHNxdXl0ZnJmdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/INXIBtayZadTNNeq71/giphy.gif" alt="Preview 1" class="active" onclick="openLightbox(this)">
+            <img src="https://media1.tenor.com/m/s7lGkoIAieYAAAAC/so-cute-cat.gif" alt="Preview 2" onclick="openLightbox(this)">
+
+          </div>
+
+          <button class="slider-btn prev" onclick="changeSlide(this, -1)">❮</button>
+          <button class="slider-btn next" onclick="changeSlide(this, 1)">❯</button>
+
+          <div class="slider-dots">
+            <span class="slider-dot active" onclick="currentSlide(this, 0)"></span>
+            <span class="slider-dot" onclick="currentSlide(this, 1)"></span>
+          </div>
+        </div>
+        <div class="card-content-text">
+          Another System
+        </div>
+      </div>
 
       <div class="card-frame">
         <div class="card-header-title">Custom Inventory System</div>
-        <div class="preview-16-9">
-          <img src="https://i.imgur.com/LsnJpX3.png" alt="Preview">
+        <div class="preview-16-9 slider-container">
+          <div class="slider-images">
+
+            <img src="https://i.imgur.com/LsnJpX3.png" alt="Preview 1" class="active" onclick="openLightbox(this)">
+            <img src="https://i.imgur.com/Su56msB.jpeg" alt="Preview 2" onclick="openLightbox(this)">
+
+          </div>
+
+          <button class="slider-btn prev" onclick="changeSlide(this, -1)">❮</button>
+          <button class="slider-btn next" onclick="changeSlide(this, 1)">❯</button>
+
+          <div class="slider-dots">
+            <span class="slider-dot active" onclick="currentSlide(this, 0)"></span>
+            <span class="slider-dot" onclick="currentSlide(this, 1)"></span>
+          </div>
         </div>
         <div class="card-content-text">
-          Block inventory system featuring dynamic slot management, hotbar integration, server-validated item stacks, and DataStore saving.
+          A responsive block inventory and hotbar system. Handles item stacking, smooth drag/slot logic, and saves data reliably without loss.
         </div>
       </div>
 
@@ -402,6 +605,107 @@
   </div>
 
 </div>
+
+<script>
+  let currentActiveImages = [];
+  let currentLightboxIndex = 0;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.slider-container').forEach(container => {
+      const images = container.querySelectorAll('.slider-images img');
+      if (images.length <= 1) {
+        container.classList.add('single-item');
+      }
+    });
+  });
+
+  function changeSlide(btn, direction) {
+    const container = btn.closest('.slider-container');
+    const images = container.querySelectorAll('.slider-images img');
+    const dots = container.querySelectorAll('.slider-dot');
+    let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+
+    images[currentIndex].classList.remove('active');
+    if (dots.length > 0) dots[currentIndex].classList.remove('active');
+
+    currentIndex = (currentIndex + direction + images.length) % images.length;
+
+    images[currentIndex].classList.add('active');
+    if (dots.length > 0) dots[currentIndex].classList.add('active');
+  }
+
+  function currentSlide(dot, index) {
+    const container = dot.closest('.slider-container');
+    const images = container.querySelectorAll('.slider-images img');
+    const dots = container.querySelectorAll('.slider-dot');
+
+    images.forEach(img => img.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+
+    images[index].classList.add('active');
+    dots[index].classList.add('active');
+  }
+
+  function openLightbox(imgElement) {
+    const container = imgElement.closest('.slider-container');
+    currentActiveImages = Array.from(container.querySelectorAll('.slider-images img')).map(img => img.src);
+    currentLightboxIndex = currentActiveImages.indexOf(imgElement.src);
+
+    let modal = document.getElementById('lightboxModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'lightboxModal';
+      modal.className = 'lightbox-modal';
+      modal.innerHTML = `
+        <div class="lightbox-window">
+          <div class="lightbox-header">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+          </div>
+          <div class="lightbox-preview-container">
+            <img class="lightbox-content" id="lightboxImg" alt="Image">
+            <button class="lightbox-btn prev" onclick="changeLightboxSlide(-1)">❮</button>
+            <button class="lightbox-btn next" onclick="changeLightboxSlide(1)">❯</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeLightbox();
+      });
+    }
+
+    updateLightboxImage();
+    modal.classList.add('open');
+
+    const prevBtn = modal.querySelector('.lightbox-btn.prev');
+    const nextBtn = modal.querySelector('.lightbox-btn.next');
+    if (currentActiveImages.length <= 1) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'flex';
+      nextBtn.style.display = 'flex';
+    }
+  }
+
+  function updateLightboxImage() {
+    const imgElem = document.getElementById('lightboxImg');
+    if (imgElem && currentActiveImages.length > 0) {
+      imgElem.src = currentActiveImages[currentLightboxIndex];
+    }
+  }
+
+  function changeLightboxSlide(direction) {
+    if (currentActiveImages.length <= 1) return;
+    currentLightboxIndex = (currentLightboxIndex + direction + currentActiveImages.length) % currentActiveImages.length;
+    updateLightboxImage();
+  }
+
+  function closeLightbox() {
+    const modal = document.getElementById('lightboxModal');
+    if (modal) modal.classList.remove('open');
+  }
+</script>
   
 <script>
   async function loadRobloxStats() {
