@@ -13,13 +13,14 @@ def fetch_json(url):
 
 def main():
     old_peak = 0
-        if os.path.exists('data.json'):
-            try:
-                with open('data.json', 'r', encoding='utf-8') as f:
-                    old_data = json.load(f)
-                    old_peak = old_data.get('game', {}).get('peak', 0)
-            except Exception:
-                pass
+    if os.path.exists('data.json'):
+        try:
+            with open('data.json', 'r', encoding='utf-8') as f:
+                old_data = json.load(f)
+                old_peak = old_data.get('game', {}).get('peak', 0)
+        except Exception:
+            pass
+
     data = {}
 
     try:
