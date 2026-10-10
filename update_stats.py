@@ -34,10 +34,11 @@ def main():
         game_data = fetch_json(game_url)['data'][0]
 
         game_name = game_data.get('name', 'Game Name')
+        root_place_id = game_data.get('rootPlaceId', '')
 
         game_stats = {
             'name': game_name,
-            'url': f"https://www.roblox.com/games/{UNIVERSE_ID}",
+            'url': f"https://www.roblox.com/games/{root_place_id}" if root_place_id else "#",
             'active': game_data.get('playing', 0),
             'visits': game_data.get('visits', 0),
             'favorites': game_data.get('favoritedCount', 0),
