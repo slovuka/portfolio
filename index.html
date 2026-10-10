@@ -144,24 +144,6 @@
       margin-bottom: 20px;
     }
 
-    .contact-btn {
-      background-color: #ffffff;
-      color: #000000;
-      border: none;
-      padding: 10px 28px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-
-    .contact-btn:hover {
-      background-color: #e1e1e6;
-      transform: translateY(-1px);
-    }
-
     .section-title {
       font-size: 1.5rem;
       font-weight: 700;
@@ -171,14 +153,20 @@
 
     .cards-grid {
       width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      flex-wrap: wrap;
       gap: 16px;
+      justify-content: center; /* Центрирует карточки, если они не заполнили ряд до конца */
+    }
+
+    .cards-grid .card-frame {
+      width: calc(50% - 8px); /* Каждая карточка занимает ровно половину минус отступ */
+      max-width: 308px;
     }
 
     @media (max-width: 550px) {
-      .cards-grid {
-        grid-template-columns: 1fr;
+      .cards-grid .card-frame {
+        width: 100%; /* На мобилках на всю ширину */
       }
     }
 
@@ -263,6 +251,60 @@
       text-align: center;
       margin-top: 12px;
     }
+
+    .buttons-container {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      width: 37px;
+      height: 37px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .icon-btn:hover {
+      background-color: #e1e1e6;
+      transform: translateY(-1px);
+    }
+
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: #000000;
+    }
+
+    .contact-btn {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .contact-btn:hover {
+      background-color: #e1e1e6;
+      transform: translateY(-1px);
+    }
+
+    .icon-btn img[src*="robloxlogo.svg"] {
+      filter: brightness(0);
+    }
   </style>
 </head>
 <body>
@@ -294,7 +336,13 @@
       description description description description description description description description
     </p>
 
-    <button onclick="copyDiscord()" id="contactBtn" class="contact-btn">Contact</button>
+    <div class="buttons-container">
+      <button onclick="copyDiscord()" id="contactBtn" class="contact-btn">Contact</button>
+
+      <a href="https://www.roblox.com/users/6174930173/profile" target="_blank" class="icon-btn" title="Roblox Profile">
+        <img src="assets/robloxlogo.svg" alt="Roblox" style="width: 20px; height: 20px;">
+      </a>
+    </div>
 
     <script>
       function copyDiscord() {
@@ -314,8 +362,9 @@
     <h2 class="section-title">Games</h2>
 
     <div class="single-card-container">
+
       <div class="card-frame">
-        <div class="card-header-title" id="gameTitle">Game Name</div>
+        <a class="card-header-title" id="gameTitle" href="#" target="_blank" style="text-decoration: none">Game Name</a>
 
         <div class="preview-16-9" id="gamePreview">
 
@@ -327,9 +376,10 @@
           <div class="stat-tag"><span>Visits</span><span id="statVisits">0</span></div>
           <div class="stat-tag"><span>Favorites</span><span id="statFavs">0</span></div>
         </div>
-      </div>
 
+      </div>
     </div>
+
     <div class="update-time" id="updateTime">Data Updated: Loading</div>
   </div>
 
@@ -337,13 +387,6 @@
     <h2 class="section-title">Works</h2>
 
     <div class="cards-grid">
-      <div class="card-frame">
-        <div class="card-header-title">Work Name</div>
-        <div class="preview-16-9"></div>
-        <div class="card-content-text">
-          Description Description Description
-        </div>
-      </div>
 
       <div class="card-frame">
         <div class="card-header-title">Work Name</div>
@@ -352,6 +395,7 @@
           Description Description Description
         </div>
       </div>
+
     </div>
   </div>
 
@@ -375,6 +419,9 @@
 
       if (data.game) {
         document.getElementById('gameTitle').innerText = data.game.name || 'Game Name';
+        if (data.game.url) {
+          document.getElementById('gameTitle').href = data.game.url;
+        }
         document.getElementById('statActive').innerText = data.game.active.toLocaleString();
         document.getElementById('statVisits').innerText = data.game.visits.toLocaleString();
         document.getElementById('statFavs').innerText = data.game.favorites.toLocaleString();
