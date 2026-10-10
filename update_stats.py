@@ -32,7 +32,7 @@ def main():
     try:
         game_url = f"https://games.roblox.com/v1/games?universeIds={UNIVERSE_ID}"
         game_data = fetch_json(game_url)['data'][0]
-        
+
         game_name = game_data.get('name', 'Game Name')
 
         game_stats = {
@@ -44,11 +44,11 @@ def main():
         }
 
         try:
-            icon_url = f"https://thumbnails.roblox.com/v1/games/icons?universeIds={UNIVERSE_ID}&returnPolicy=PlaceHolder&size=768x432&format=Png&isCircular=false"
-            icon_data = fetch_json(icon_url)
-            game_stats['image'] = icon_data['data'][0]['imageUrl']
+            thumb_url = f"https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds={UNIVERSE_ID}&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false"
+            thumb_data = fetch_json(thumb_url)
+            game_stats['image'] = thumb_data['data'][0]['thumbnails'][0]['imageUrl']
         except Exception as e:
-            print("Error fetching game icon:", e)
+            print("Error fetching game thumbnail:", e)
 
         data['game'] = game_stats
     except Exception as e:
