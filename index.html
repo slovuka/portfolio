@@ -256,6 +256,12 @@
       line-height: 1.4;
       padding: 2px 4px;
     }
+
+    .update-time {
+      font-size: 0.75rem;
+      color: #777777;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -287,8 +293,6 @@
       description description description description description description description description
     </p>
 
-    <span id="updateTime">Updated: Loading...</span>
-
     <button onclick="copyDiscord()" id="contactBtn" class="contact-btn">Contact</button>
 
     <script>
@@ -310,19 +314,21 @@
 
     <div class="single-card-container">
       <div class="card-frame">
-        <div class="card-header-title">Game Name</div>
+        <div class="card-header-title" id="gameTitle">Game Name</div>
 
-        <div class="preview-16-9">
+        <div class="preview-16-9" id="gamePreview">
 
         </div>
 
         <div class="game-stats-grid">
-          <div class="stat-tag"><span>Active</span><strong id="statActive">0</strong></div>
-          <div class="stat-tag"><span>Peak</span><strong>-</strong></div>
-          <div class="stat-tag"><span>Visits</span><strong id="statVisits">0</strong></div>
-          <div class="stat-tag"><span>Favorites</span><strong id="statFavs">0</strong></div>
+          <div class="stat-tag"><span>Active</span>id="statActive">0</div>
+          <div class="stat-tag"><span>Peak</span>-</div>
+          <div class="stat-tag"><span>Visits</span>id="statVisits">0</div>
+          <div class="stat-tag"><span>Favorites</span>id="statFavs">0</div>
         </div>
       </div>
+      
+      <div class="update-time" id="updateTime">Updated: Loading</div>
     </div>
   </div>
 
@@ -367,9 +373,14 @@
       }
 
       if (data.game) {
+        document.getElementById('gameTitle').innerText = data.game.name || 'Game Name';
         document.getElementById('statActive').innerText = data.game.active.toLocaleString();
         document.getElementById('statVisits').innerText = data.game.visits.toLocaleString();
         document.getElementById('statFavs').innerText = data.game.favorites.toLocaleString();
+
+        if (data.game.image) {
+          document.getElementById('gamePreview').innerHTML = `<img src="${data.game.image}" alt="Game Cover">`;
+        }
       }
       
       if (data.last_updated) {
