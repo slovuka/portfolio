@@ -473,6 +473,27 @@
     .lightbox-btn:hover { background: rgba(0, 0, 0, 0.8); }
     .lightbox-btn.prev { left: 10px; }
     .lightbox-btn.next { right: 10px; }
+
+    .hire-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #2b2b2b;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #47cf23;
+      border-radius: 50%;
+      position: relative;
+    }
   </style>
 </head>
 <body>
@@ -503,6 +524,11 @@
     <p class="description">
       Roblox Advanced Scripter & Systems Architect. Core developer of Blocky (3.6M+ visits, 1,600+ peak CCU). Specialized in high-performance Luau scripting, clean client-server architecture, modular game systems, and automated development workflows.
     </p>
+
+    <div class="hire-status">
+      <span class="status-dot"></span>
+      Available for Hire
+    </div>
 
     <div class="buttons-container">
       <button onclick="copyDiscord()" id="contactBtn" class="contact-btn">Contact</button>
@@ -560,8 +586,8 @@
         <div class="preview-16-9 slider-container">
           <div class="slider-images">
 
-            <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG13ZjQxcnFidWR3aXY0cm01NmhwcHNhMWx0cG1xaHNxdXl0ZnJmdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/INXIBtayZadTNNeq71/giphy.gif" alt="Preview 1" class="active" onclick="openLightbox(this)">
-            <img src="https://media1.tenor.com/m/s7lGkoIAieYAAAAC/so-cute-cat.gif" alt="Preview 2" onclick="openLightbox(this)">
+            <video src="https://i.imgur.com/O9RZKQy.mp4" muted loop playsinline class="active" onclick="openLightbox(this)"></video>
+            <video src="https://i.imgur.com/NkROKEO.mp4" muted loop playsinline onclick="openLightbox(this)"></video>
 
           </div>
 
@@ -569,8 +595,7 @@
           <button class="slider-btn next" onclick="changeSlide(this, 1)">❯</button>
 
           <div class="slider-dots">
-            <span class="slider-dot active" onclick="currentSlide(this, 0)"></span>
-            <span class="slider-dot" onclick="currentSlide(this, 1)"></span>
+
           </div>
         </div>
         <div class="card-content-text">
@@ -592,8 +617,7 @@
           <button class="slider-btn next" onclick="changeSlide(this, 1)">❯</button>
 
           <div class="slider-dots">
-            <span class="slider-dot active" onclick="currentSlide(this, 0)"></span>
-            <span class="slider-dot" onclick="currentSlide(this, 1)"></span>
+
           </div>
         </div>
         <div class="card-content-text">
@@ -607,49 +631,78 @@
 </div>
 
 <script>
-  let currentActiveImages = [];
+  let currentActiveMedia = [];
   let currentLightboxIndex = 0;
 
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.slider-container').forEach(container => {
-      const images = container.querySelectorAll('.slider-images img');
-      if (images.length <= 1) {
+      const mediaItems = container.querySelectorAll('.slider-images img, .slider-images video');
+
+      const dotsContainer = container.querySelector('.slider-dots');
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        mediaItems.forEach((_, index) => {
+          const dot = document.createElement('span');
+          dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
+          dot.onclick = () => currentSlide(dot, index);
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      if (mediaItems.length <= 1) {
         container.classList.add('single-item');
       }
+
+      container.addEventListener('mouseenter', () => {
+        const activeVideo = container.querySelector('video.active');
+        if (activeVideo) activeVideo.play();
+      });
+
+      container.addEventListener('mouseleave', () => {
+        const activeVideo = container.querySelector('video.active');
+        if (activeVideo) {
+          activeVideo.pause();
+          activeVideo.currentTime = 0;
+        }
+      });
+
     });
   });
 
   function changeSlide(btn, direction) {
     const container = btn.closest('.slider-container');
-    const images = container.querySelectorAll('.slider-images img');
+    const mediaItems = container.querySelectorAll('.slider-images img, .slider-images video');
     const dots = container.querySelectorAll('.slider-dot');
-    let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+    let currentIndex = Array.from(mediaItems).findIndex(item => item.classList.contains('active'));
 
-    images[currentIndex].classList.remove('active');
+    mediaItems[currentIndex].classList.remove('active');
     if (dots.length > 0) dots[currentIndex].classList.remove('active');
 
-    currentIndex = (currentIndex + direction + images.length) % images.length;
+    currentIndex = (currentIndex + direction + mediaItems.length) % mediaItems.length;
 
-    images[currentIndex].classList.add('active');
+    mediaItems[currentIndex].classList.add('active');
     if (dots.length > 0) dots[currentIndex].classList.add('active');
   }
 
   function currentSlide(dot, index) {
     const container = dot.closest('.slider-container');
-    const images = container.querySelectorAll('.slider-images img');
+    const mediaItems = container.querySelectorAll('.slider-images img, .slider-images video');
     const dots = container.querySelectorAll('.slider-dot');
 
-    images.forEach(img => img.classList.remove('active'));
+    mediaItems.forEach(item => item.classList.remove('active'));
     dots.forEach(d => d.classList.remove('active'));
 
-    images[index].classList.add('active');
+    mediaItems[index].classList.add('active');
     dots[index].classList.add('active');
   }
 
-  function openLightbox(imgElement) {
-    const container = imgElement.closest('.slider-container');
-    currentActiveImages = Array.from(container.querySelectorAll('.slider-images img')).map(img => img.src);
-    currentLightboxIndex = currentActiveImages.indexOf(imgElement.src);
+  function openLightbox(mediaElement) {
+    const container = mediaElement.closest('.slider-container');
+    currentActiveMedia = Array.from(container.querySelectorAll('.slider-images img, .slider-images video')).map(item => ({
+      src: item.src || item.querySelector('source')?.src,
+      tagName: item.tagName.toLowerCase()
+    }));
+    currentLightboxIndex = currentActiveMedia.findIndex(m => m.src === (mediaElement.src || mediaElement.querySelector('source')?.src));
 
     let modal = document.getElementById('lightboxModal');
     if (!modal) {
@@ -661,8 +714,7 @@
           <div class="lightbox-header">
             <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
           </div>
-          <div class="lightbox-preview-container">
-            <img class="lightbox-content" id="lightboxImg" alt="Image">
+          <div class="lightbox-preview-container" id="lightboxContainer">
             <button class="lightbox-btn prev" onclick="changeLightboxSlide(-1)">❮</button>
             <button class="lightbox-btn next" onclick="changeLightboxSlide(1)">❯</button>
           </div>
@@ -674,36 +726,57 @@
       });
     }
 
-    updateLightboxImage();
+    updateLightboxContent();
     modal.classList.add('open');
 
     const prevBtn = modal.querySelector('.lightbox-btn.prev');
     const nextBtn = modal.querySelector('.lightbox-btn.next');
-    if (currentActiveImages.length <= 1) {
+    if (currentActiveMedia.length <= 1) {
       prevBtn.style.display = 'none';
       nextBtn.style.display = 'none';
     } else {
       prevBtn.style.display = 'flex';
-      nextBtn.style.display = 'flex';
+      prevBtn.style.display = 'flex';
     }
   }
 
-  function updateLightboxImage() {
-    const imgElem = document.getElementById('lightboxImg');
-    if (imgElem && currentActiveImages.length > 0) {
-      imgElem.src = currentActiveImages[currentLightboxIndex];
+  function updateLightboxContent() {
+    const container = document.getElementById('lightboxContainer');
+    const oldContent = container.querySelector('.lightbox-content');
+    if (oldContent) oldContent.remove();
+
+    const currentItem = currentActiveMedia[currentLightboxIndex];
+
+    if (currentItem.tagName === 'video') {
+      const videoElem = document.createElement('video');
+      videoElem.src = currentItem.src;
+      videoElem.className = 'lightbox-content';
+      videoElem.controls = true;
+      videoElem.autoplay = true;
+      videoElem.playsInline = true;
+      container.insertBefore(videoElem, container.firstChild);
+    } else {
+      const imgElem = document.createElement('img');
+      imgElem.src = currentItem.src;
+      imgElem.className = 'lightbox-content';
+      imgElem.alt = 'Image';
+      container.insertBefore(imgElem, container.firstChild);
     }
   }
 
   function changeLightboxSlide(direction) {
-    if (currentActiveImages.length <= 1) return;
-    currentLightboxIndex = (currentLightboxIndex + direction + currentActiveImages.length) % currentActiveImages.length;
-    updateLightboxImage();
+    if (currentActiveMedia.length <= 1) return;
+    currentLightboxIndex = (currentLightboxIndex + direction + currentActiveMedia.length) % currentActiveMedia.length;
+    updateLightboxContent();
   }
 
   function closeLightbox() {
     const modal = document.getElementById('lightboxModal');
-    if (modal) modal.classList.remove('open');
+    if (modal) {
+      modal.classList.remove('open');
+      const video = modal.querySelector('video');
+      if (video) video.pause();
+    }
   }
 </script>
   
